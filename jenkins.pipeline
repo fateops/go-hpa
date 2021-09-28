@@ -1,0 +1,23 @@
+pipeline{
+    agent { node { label "jnlp-slave-hpa"}}
+        parameters{
+            string(name: 'AppName', defaultValue: 'App name', description: 'Input you want change APP name')
+            string(name: 'Number', defaultValue:'Number',description: 'Input number you want extensions' )           
+    }
+    options {
+        timestamps()  //The log will have time
+        skipDefaultCheckout()  //Remove the implicit checkout SCM statement
+        disableConcurrentBuilds() //Prohibit parallel
+        timeout(time: 3, unit: 'MINUTES')  //Pipeline timeout is set for 1h
+    }
+    stages {
+        stage("config LT K8S") {
+            steps {
+                script{
+                  sh "/home/app ${params.AppName} ${params.Number}"
+                }
+            }
+        } 
+     }     
+}
+
